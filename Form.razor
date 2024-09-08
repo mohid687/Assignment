@@ -1,0 +1,93 @@
+﻿@page "/reviewform"
+@using Assignment.Model
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager NavigationManager
+
+<h3>Submit Your Review</h3>
+<hr />
+
+<EditForm Model="@review" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Product Name -->
+    <div class="form-group">
+        <label for="ProductName">Product Name</label>
+        <InputText id="ProductName" class="form-control" @bind-Value="review.ProductName" />
+        <ValidationMessage For="@(() => review.ProductName)" />
+    </div>
+
+    <!-- Rating -->
+    <div class="form-group">
+        <label for="Rating">Rating</label>
+        <InputSelect id="Rating" class="form-control" @bind-Value="review.Rating">
+            <option value="">Select Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => review.Rating)" />
+    </div>
+
+    <!-- Review Description -->
+    <div class="form-group">
+        <label for="ReviewDescription">Review Description</label>
+        <InputTextArea id="ReviewDescription" class="form-control" @bind-Value="review.ReviewDescription" />
+        <ValidationMessage For="@(() => review.ReviewDescription)" />
+    </div>
+
+    <!-- Purchase Date -->
+    <div class="form-group">
+        <label for="PurchaseDate">Purchase Date</label>
+        <InputDate id="PurchaseDate" class="form-control" @bind-Value="review.PurchaseDate" />
+        <ValidationMessage For="@(() => review.PurchaseDate)" />
+    </div>
+
+    <!-- Would You Recommend? -->
+    <div class="form-group">
+        <label>Would You Recommend?</label>
+        <div>
+            <InputRadio id="RecommendYes" @bind-Value="review.WouldRecommend" Value="Yes" /> <label for="RecommendYes">Yes</label>
+            <InputRadio id="RecommendNo" @bind-Value="review.WouldRecommend" Value="No" /> <label for="RecommendNo">No</label>
+        </div>
+        <ValidationMessage For="@(() => review.WouldRecommend)" />
+    </div>
+
+    <!-- Agree to Terms -->
+    <div class="form-group">
+        <InputCheckbox id="AgreeToTerms" @bind-Value="review.AgreeToTerms" />
+        <label for="AgreeToTerms">I agree to the terms and conditions</label>
+        <ValidationMessage For="@(() => review.AgreeToTerms)" />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </div>
+
+    <!-- Thank You Message -->
+    @if (showThankYouMessage)
+    {
+        <div class="alert alert-success mt-3">
+            <h4>Thank you for your review!</h4>
+            <p><strong>Product Name:</strong> @review.ProductName</p>
+            <p><strong>Rating:</strong> @review.Rating</p>
+            <p><strong>Review Description:</strong> @review.ReviewDescription</p>
+            <p><strong>Purchase Date:</strong> @review.PurchaseDate.ToShortDateString()</p>
+            <p><strong>Would Recommend:</strong> @review.WouldRecommend</p>
+            <p><strong>Agreed to Terms:</strong> @(review.AgreeToTerms ? "Yes" : "No")</p>
+        </div>
+    }
+</EditForm>
+
+@code {
+    private Review review = new Review();
+    private bool showThankYouMessage = false;
+
+    private void HandleValidSubmit()
+    {
+        showThankYouMessage = true;
+    }
+}
